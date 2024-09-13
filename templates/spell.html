@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spell Checker</title>
+    <style>
+        :root {
+            --primary-color: #25D366; /* Bright green */
+            --secondary-color: #128C7E; /* Dark teal */
+            --background-color: #F0F4F8; /* Light grey */
+            --text-color: #333; /* Dark grey */
+            --highlight-color: #FFEB3B; /* Yellow for highlighting */
+            --border-color: #DDDDDD; /* Light grey border */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        h1, h2 {
+            color: var(--primary-color);
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 20px auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            color: var(--text-color);
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        .highlighted-text {
+            background-color: var(--highlight-color);
+            padding: 10px;
+            border-radius: 6px;
+            color: var(--text-color);
+            word-wrap: break-word;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.3s;
+        }
+
+        li:hover {
+            background-color: var(--highlight-color);
+        }
+
+        strong {
+            color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <h1>Spell Checker</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <button type="submit">Check Spelling</button>
+    </form>
+
+    {% if highlighted_text %}
+        <h2>Highlighted Text</h2>
+        <p class="highlighted-text">{{ highlighted_text|safe }}</p>
+    {% endif %}
+
+    {% if suggestions %}
+        <h2>Suggestions</h2>
+        <ul>
+            {% for suggestion in suggestions %}
+                <li>
+                    <strong>{{ suggestion.error }}</strong> - Suggestions: 
+                    {% for word in suggestion.suggestions %}
+                        {{ word }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
