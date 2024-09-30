@@ -39,12 +39,14 @@ def lesson_detail(request, id):
 from django.shortcuts import render
 from django.http import JsonResponse
 import google.generativeai as genai
-
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 
 # Configure API key directly
-api_key = "AIzaSyCThnASZ53viHUOfF7sqIBcc2-hBNLfZyw"
-genai.configure(api_key=api_key)
+API_KEY = os.getenv('API_KEY')
+genai.configure(api_key=API_KEY)
 
 # Initialize model
 generation_config = {
