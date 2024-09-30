@@ -86,9 +86,9 @@ DATABASES = {
     }
 }
 
-DATABASES = {
-    'default': dj_database_url.parse('postgresql://testdb_cnoq_user:a0KbIG5QjY0b96QZRrVLuCFzp2upMPYK@dpg-crtdind2ng1s73c08s3g-a.oregon-postgres.render.com/testdb_cnoq')
-}
+# DATABASES = {
+#     'default': dj_database_url.parse('postgresql://testdb_cnoq_user:a0KbIG5QjY0b96QZRrVLuCFzp2upMPYK@dpg-crtdind2ng1s73c08s3g-a.oregon-postgres.render.com/testdb_cnoq')
+# }
 
 
 # Password validation
