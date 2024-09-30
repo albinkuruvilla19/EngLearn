@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,138 +9,123 @@
     <title>{{ quiz.name }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body {
+        .quiz-page {
             font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #002b20;
-            color: #ffffff;
+            background-color: #e8f5e9;
+            color: #33691e;
+            background-image: url('{% static "assets/img/home_page.png" %}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
-        .container {
+        
+        .quiz-page .quiz-container {
             max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: #004a36;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            color: #ffffff;
-            margin-bottom: 20px;
+            margin: 5rem auto;
+            background-color: #c8e6c9;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
-        .question-info {
-            color: #e0f7fa; /* Light cyan */
-            font-size: 1.2em;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .question-number {
+        
+        .quiz-page h2 {
+            color: #1b5e20;
+            margin-bottom: 2rem;
             font-weight: 600;
-            font-size: 1.5em;
         }
-        .question-text {
-            color: #ffffff;
-            font-size: 1.3em;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        .option {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            padding: 10px;
+        
+        .quiz-page .completed-message {
+            background-color: #a5d6a7;
+            padding: 1rem;
             border-radius: 5px;
-            background-color: #003d2b; /* Slightly darker green */
-            transition: background-color 0.3s;
+            margin-bottom: 2rem;
         }
-        .option:hover {
-            background-color: #002c1b; /* Even darker green on hover */
+        
+        .quiz-page .completed-message a {
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: bold;
         }
-        input[type="radio"] {
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 2px solid #25d366; /* WhatsApp green */
-            outline: none;
-            margin-right: 15px;
-            cursor: pointer;
-            position: relative;
+        
+        .quiz-page .question-info {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            color: #2e7d32;
         }
-        input[type="radio"]:checked::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 12px;
-            height: 12px;
-            background-color: #25d366; /* WhatsApp green */
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
+        
+        .quiz-page .question-number {
+            font-weight: bold;
         }
-        label {
-            font-size: 1.1em;
+        
+        .quiz-page .question-text {
+            background-color: #a5d6a7;
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            text-align: left;
+            color: #1b5e20;
         }
-        .buttons {
+        
+        .quiz-page .option {
+            background-color: #c8e6c9;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+            text-align: left;
+        }
+        
+        .quiz-page .option input {
+            margin-right: 1rem;
+        }
+        
+        .quiz-page .option label {
+            font-size: 1rem;
+        }
+        
+        .quiz-page .buttons {
+            margin-top: 1.5rem;
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
         }
-        .buttons a, .buttons button {
-            padding: 10px 20px;
+        
+        .quiz-page button,
+        .quiz-page .back-link,
+        .quiz-page .completed-message a {
+            background-color: #2e7d32;
+            color: white;
             border: none;
+            padding: 0.75rem 1.5rem;
             border-radius: 5px;
-            font-size: 1.1em;
             cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .buttons a {
-            background-color: #25d366; /* WhatsApp green */
-            color: #ffffff;
+            transition: background-color 0.3s ease;
             text-decoration: none;
         }
-        .buttons a:hover {
-            background-color: #1ebd74; /* Slightly darker green */
+        
+        .quiz-page button:hover,
+        .quiz-page .back-link:hover,
+        .quiz-page .completed-message a:hover {
+            background-color: #1b5e20;
         }
-        .buttons button {
-            background-color: #004d40; /* Darker green */
-            color: #ffffff;
+        
+        .quiz-page .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
         }
-        .buttons button:hover {
-            background-color: #003527; /* Even darker green */
-        }
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            font-size: 1.1em;
-            color: #25d366;
-            text-decoration: none;
-        }
-        .back-link:hover {
-            color: #1ebd74;
-        }
-        .completed-message {
-            color: #ffeb3b; /* Yellow for completed message */
-            text-align: center;
-            font-size: 1.2em;
-            margin-top: 20px;
-        }
+        
     </style>
 </head>
-<body>
-    <div class="container">
+
+<body class="quiz-page"> <!-- Ensuring unique class for quiz page -->
+    {% include "nav.html" %}
+    <div class="quiz-container"> <!-- Use unique class to scope styles -->
         <h2>{{ quiz.name }}</h2>
         {% if user_score %}
             <div class="completed-message">
                 You have already completed this quiz. Your score: {{ user_score.score }} out of {{ total_possible_score }}.
                 <br>
-                <a href="{% url 'quiz_result' quiz.id %}" class="back-link">View Answers</a>
+                <a href="{% url 'quiz_result' quiz.id %}">View Answers</a>
             </div>
         {% else %}
             <div class="question-info">
@@ -158,7 +146,7 @@
 
                 <div class="buttons">
                     {% if question_number > 1 %}
-                        <a href="{% url 'quiz_detail' quiz.id question_number|add:'-1' %}">Previous</a>
+                        <a href="{% url 'quiz_detail' quiz.id question_number|add:'-1' %}" class="back-link">Previous</a>
                     {% endif %}
                     
                     <button type="submit">
@@ -174,4 +162,6 @@
         <a href="{% url 'topic_list' %}" class="back-link">Back to Topics</a>
     </div>
 </body>
+
 </html>
+{% endblock content %}

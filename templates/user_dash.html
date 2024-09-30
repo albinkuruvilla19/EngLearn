@@ -1,0 +1,271 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - English Learning Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #25D366;
+            --secondary-color: #128C7E;
+            --background-color: #ECE5DD;
+            --text-color: #075E54;
+        }
+        body {
+            background-image: url('{% static "assets/img/home_page.png" %}'); /* Replace with your image path */
+            background-size: cover; /* Cover the entire body */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Prevent the image from repeating */
+            color: var(--text-color);
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        .progress-bar {
+            background-color: var(--primary-color);
+        }
+        .chart-container {
+            position: relative;
+            height: 200px;
+            width: 100%;
+        }
+        
+        #hoursStudied {
+            color: #25D366; /* Green text */
+            font-weight: bold;
+            font-size: 1.5em;
+            animation: glowing 1.5s infinite;
+        }
+    
+    </style>
+</head>
+<body>
+    {% include "nav.html" %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h4 id="userName">{{ user.username }}</h4>
+                        <p>English Learner</p>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit Profile</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Quick Stats</h5>
+                    </div>
+                    <div class="card-body">
+                        
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Lessons Completed:</span>
+                            <span id="lessonsCompleted">{{ completed_lessons_count }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Login Streak:</span>
+                            <span id="hoursStudied">{{ login_streak }} days</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>XP Points:</span>
+                            <span id="xpPoints">{{ total_skillup_points }}</span>  <!-- Display total skillup points -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Detailed Statistics</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Skill Progress</h6>
+                                <div class="mb-2">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Reading</span>
+                                        <span>75%</span>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Writing</span>
+                                        <span>60%</span>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Listening</span>
+                                        <span>80%</span>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width: 80%;" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Speaking</span>
+                                        <span>70%</span>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width: 70%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>You vs other users</h6>
+                                <div class="chart-container">
+                                    <canvas id="weeklyActivityChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Leaderboard</h5>
+                    </div>
+                    <div class="card-body">
+                        
+                        <ul class="list-group list-group-flush" id="leaderboardList">
+                            {% for rank, score in ranked_scores %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-trophy text-warning me-2"></i>{{ rank }}. {{ score.user__username }}</span>
+                                <span class="badge bg-primary rounded-pill">{{ score.total_skillup_points }} XP</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProfileForm">
+                        <div class="mb-3">
+                            <label for="editName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="editName" value="John Doe">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editEmail" value="john.doe@example.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editLanguageLevel" class="form-label">Language Level</label>
+                            <select class="form-select" id="editLanguageLevel">
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate" selected>Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="saveProfile()">Save changes</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+   
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script>
+        function saveProfile() {
+            const name = document.getElementById('editName').value;
+            const email = document.getElementById('editEmail').value;
+            const languageLevel = document.getElementById('editLanguageLevel').value;
+
+            // Update profile information
+            document.getElementById('userName').textContent = name;
+            document.getElementById('currentLevel').textContent = languageLevel;
+
+            // Close the modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+            modal.hide();
+
+            // You would typically send this data to a server here
+            console.log('Profile updated:', { name, email, languageLevel });
+        }
+
+    // Get data from Django context
+    const userTotalSkillupPoints = {{ user_total_skillup_points }};
+    const averageTotalSkillupPoints = {{ average_total_skillup_points }};
+
+    // Set up the chart
+    const ctx = document.getElementById('weeklyActivityChart').getContext('2d');
+    const weeklyActivityChart = new Chart(ctx, {
+        type: 'bar', // You can change this to 'line', 'pie', etc.
+        data: {
+            labels: ['Your Skill Points', 'Average Skill Points'], // Chart labels
+            datasets: [{
+                label: 'Skill Points Comparison',
+                data: [userTotalSkillupPoints, averageTotalSkillupPoints], // Data values
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.6)', // User's bar color
+                    'rgba(153, 102, 255, 0.6)' // Average bar color
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true // Start y-axis from zero
+                }
+            }
+        }
+    });
+
+        // You can add more JavaScript functionality here, such as:
+        // - Fetching and updating user data from a server
+        // - Implementing interactive features for lessons and activities
+        // - Adding animations or transitions for a more engaging user experience
+    </script>
+</body>
+</html>

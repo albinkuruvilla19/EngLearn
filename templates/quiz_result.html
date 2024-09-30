@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,51 +11,47 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #002b20;
-            color: #ffffff;
+            background-color: #e8f5e9; /* Light green background */
+            color: #33691e; /* Dark green text */
         }
         .container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: #004a36;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
         }
         h2 {
-            color: #ffffff;
-            margin-bottom: 20px;
+            color: #1b5e20; /* Darker green for the heading */
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            font-size: 2rem;
         }
         .score {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            color: #e0f7fa; /* Light cyan */
+            font-size: 1.5rem;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+        .chart-container {
+            position: relative;
+            margin: 0 auto;
+            max-width: 600px; /* Limiting the chart's width */
         }
         .back-link {
-            display: block;
-            margin-top: 20px;
-            font-size: 1.1em;
-            color: #25d366;
+            display: inline-block;
+            margin-top: 2rem;
+            color: #1b5e20; /* Darker green for links */
+            font-size: 1.1rem;
             text-decoration: none;
         }
         .back-link:hover {
-            color: #1ebd74;
-        }
-        .chart-container {
-            max-width: 600px;
-            margin: 20px auto;
-        }
-        canvas {
-            max-width: 100%; /* Ensure the chart fits within the container */
-            height: auto;
+            text-decoration: underline; /* Underline effect on hover */
         }
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    {% include "nav.html" %}
     <div class="container">
         <h2>Quiz Result: {{ quiz.name }}</h2>
         <p class="score">Your Score: {{ user_score.score }} / {{ total_possible_score }}</p>
@@ -60,8 +59,14 @@
         <div class="chart-container">
             <canvas id="scoreChart"></canvas>
         </div>
+        <center>
 
-        <a href="{% url 'quiz_list' quiz.topic.id %}" class="back-link">Back to Quizzes</a>
+            <a href="{% url 'quiz_list' quiz.topic.id %}" class="back-link">Back to Quizzes</a>
+        <br>
+        <a href="{% url 'download_quiz_pdf' quiz.id %}" class="back-link">Download Answers as PDF</a>
+        </center>
+
+        
     </div>
 
     <script>
@@ -90,3 +95,4 @@
     </script>
 </body>
 </html>
+{% endblock %}

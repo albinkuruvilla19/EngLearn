@@ -1,3 +1,7 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,76 +12,87 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #002b20;
-            color: #ffffff;
+            background-image: url('{% static "assets/img/home_page.png" %}'); /* Replace with your image path */
+            background-size: cover; /* Cover the entire body */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Prevent the image from repeating */
+            color: #33691e; /* Dark green text */
         }
-        .container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: #004a36;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        .quiz-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
         }
-        h1, h2 {
-            color: #ffffff;
-            margin-bottom: 20px;
+        .quiz-container h1 {
+            color: #1b5e20; /* Darker green for the heading */
             text-align: center;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            font-size: 2rem;
+            animation: fadeIn 0.5s; /* AOS fade effect */
         }
-        ul {
+        .quiz-container ul {
             list-style: none;
             padding: 0;
         }
-        ul li {
-            margin-bottom: 15px;
+        .quiz-container li {
+            background-color: #c8e6c9; /* Light green list items */
+            margin: 1rem 0;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeIn 0.5s; /* AOS fade effect */
         }
-        a {
+        .quiz-container li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .quiz-container a {
             text-decoration: none;
-            color: #25d366; /* WhatsApp green */
-            font-size: 1.2em;
+            color: #2e7d32; /* Medium green for links */
+            font-weight: 600;
+            font-size: 1.2rem;
             display: block;
-            padding: 15px;
-            background-color: #003527;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
         }
-        a:hover {
-            background-color: #004d40; /* Slightly darker green */
-            color: #ffffff;
+        .quiz-container a:hover {
+            color: #1b5e20; /* Darker green on hover */
         }
         .back-link {
-            display: block;
-            margin-top: 20px;
-            text-align: center;
-            font-size: 1.2em;
-            color: #25d366;
-            text-decoration: none;
-            padding: 10px;
-            border: 1px solid #25d366;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
+            display: inline-block;
+            margin-top: 2rem;
+            color: #1b5e20; /* Darker green for the back link */
+            font-size: 1.1rem;
         }
         .back-link:hover {
-            background-color: #25d366;
-            color: #ffffff;
+            text-decoration: underline; /* Underline effect on hover */
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Quizzes for {{ topic.name }}</h1>
+    {% include "nav.html" %}
+    <div class="quiz-container">
+        <h1 data-aos="fade-down">Quizzes for {{ topic.name }}</h1>
         <ul>
             {% for quiz in quizzes %}
-                <li>
+                <li data-aos="fade-up">
                     <a href="{% url 'quiz_detail' quiz.id 1 %}">
                         {{ quiz.name }}
                     </a>
                 </li>
             {% endfor %}
         </ul>
-        <a class="back-link" href="{% url 'topic_list' %}">Back to Topics</a>
+        <a class="back-link" href="{% url 'topic_list' %}" data-aos="fade-up">Back to Topics</a>
     </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+        });
+    </script>
 </body>
 </html>
+
+{% endblock %}

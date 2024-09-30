@@ -36,45 +36,7 @@
 
   <!-- Navbar Section -->
   <section id="home_pages">
-    <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
-      <div class="container">
-        <a class="navbar-brand" href="index.html"><img src="{% static 'assets/img/brand.png' %}" width="40" alt="brand-logo">&nbsp; EngLearn</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-          <ul class="navbar-nav mx-auto">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url "lessons" %}">Docs</a>
-            </li> 
-            <li class="nav-item">
-              <a class="nav-link" href="#about_us">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url "features" %}">Features</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url "chat" %}">Chat with AI</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url "topic_list" %}">Practice</a>
-            </li>
-          </ul>
-          {% if request.user.is_authenticated %}
-          <ul>
-            Hello, {{ request.user.username }}</a>
-          </ul>
-          {% else %}
-          <ul>
-            <a href="">Login/Register</a>
-          </ul>
-          {% endif %}
-        </div>
-      </div>
-    </nav>
+    {% include "nav.html" %}
     <!-- Navbar End -->
 
     <!-- Jumbotron -->

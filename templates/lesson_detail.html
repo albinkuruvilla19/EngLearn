@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Grammar Lesson - {{ lesson.name }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- bootstrap 5 css -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css" integrity="sha384-DhY6onE6f3zzKbjUPRc2hOzGAdEf4/Dz+WJwBvEYL/lkkIsI3ihufq9hk9K4lVoK" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Boostrap Icon -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #e8f5e9;
+            color: #33691e;
+            background-color: #e8f5e9;
+            background-image: url('{% static "assets/img/home_page.png" %}'); /* Replace with your image path */
+            background-size: cover; /* Cover the entire body */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Prevent the image from repeating */
+        }
+        .container {
+            max-width: 1500px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1b5e20;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        h2 {
+            color: #2e7d32;
+            margin-top: 2rem;
+        }
+        .section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: #c8e6c9;
+            border-radius: 8px;
+        }
+        .example {
+            background-color: #a5d6a7;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .callout {
+            background-color: #81c784;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+        .finish-button {
+            display: inline-block;
+            background-color: #2e7d32;
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            margin-top: 2rem;
+            transition: background-color 0.3s ease;
+        }
+        .finish-button:hover {
+            background-color: #1b5e20;
+            color: white;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    {% include "nav.html" %}
+    <div class="container">
+        <h1 data-aos="fade-down">{{ lesson.name }}</h1>
+        <p data-aos="fade-up">{{ lesson.description }}</p>
+
+        {% for section in sections %}
+            <div class="section" data-aos="fade-up">
+                <h2 class="section-title">{{ section.title }}</h2>
+                <p>{{ section.content }}</p>
+                {% if section.example %}
+                    <div class="example">
+                        <strong>Examples:</strong><br>
+                        {{ section.example|safe }}
+                    </div>
+                {% endif %}
+                <ul>
+                    {% for item in section.items.all %}
+                        <li><strong>{{ item.title }}:</strong> {{ item.description }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+
+        {% if lesson.tip %}
+            <div class="callout" data-aos="fade-up">
+                <strong>Tip:</strong> {{ lesson.tip }}
+            </div>
+        {% endif %}
+
+        {% if lesson.id in completed_lessons %}
+            <a href="{% url "lessons" %}" class="finish-button" data-aos="fade-up">Already finished</a>
+        {% else %}
+            <a href="{% url 'complete_lesson' lesson.id %}" class="finish-button" data-aos="fade-up">Finish</a>
+        {% endif %}
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

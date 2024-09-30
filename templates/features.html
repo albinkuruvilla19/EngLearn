@@ -1,121 +1,149 @@
+{% extends "base.html" %} {% load static %} {% block content %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Platform Features</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <!-- bootstrap 5 css -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css"
+      integrity="sha384-DhY6onE6f3zzKbjUPRc2hOzGAdEf4/Dz+WJwBvEYL/lkkIsI3ihufq9hk9K4lVoK"
+      crossorigin="anonymous"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <style>
-        :root {
-            --primary-color: #25D366;
-            --secondary-color: #128C7E;
-            --background-color: #ECE5DD;
-            --text-color: #075E54;
-        }
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #002b20;
-            color: var(--text-color);
-        }
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 40px 20px;
-        }
-        .cards-wrapper {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 30px;
-            max-width: 1200px;
-        }
-        .card {
-            background-color: #fff;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 300px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-        }
-        .card h3 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            color: var(--secondary-color);
-        }
-        .card p {
-            font-size: 1rem;
-            margin-bottom: 25px;
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-        .card button {
-            background-color: var(--primary-color);
-            color: #fff;
-            border: none;
-            border-radius: 25px;
-            padding: 12px 25px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-            font-weight: bold;
-        }
-        .card button:hover {
-            background-color: var(--secondary-color);
-            transform: scale(1.05);
-        }
-        .card-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-        }
-        @media (max-width: 768px) {
-            .cards-wrapper {
-                flex-direction: column;
-                align-items: center;
-            }
-            .card {
-                width: 100%;
-                max-width: 300px;
-            }
-        }
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #e8f5e9;
+        color: #33691e;
+        background-image: url('{% static "assets/img/home_page.png" %}'); /* Replace with your image path */
+        background-size: cover; /* Cover the entire body */
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* Prevent the image from repeating */
+      }
+      .container {
+        max-width: 1200px;
+      }
+      h1 {
+        color: #1b5e20;
+        margin: 2rem auto;
+        text-align: center;
+        margin-bottom: 2rem;
+        font-weight: 600;
+      }
+      .cards-wrapper {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+      .custom-card {
+        background-color: #c8e6c9;
+        border-radius: 10px;
+        padding: 2rem;
+        width: 300px;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .custom-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+      .card-icon {
+        font-size: 3rem;
+        color: #2e7d32;
+        margin-bottom: 1rem;
+      }
+      h3 {
+        color: #1b5e20;
+        margin-bottom: 1rem;
+      }
+      p {
+        margin-bottom: 1.5rem;
+      }
+      .btn-custom {
+        background-color: #2e7d32;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      .btn-custom:hover {
+        background-color: #1b5e20;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
+  </head>
+  <body>
+    {% include "nav.html" %}
     <div class="container">
-        <div class="cards-wrapper">
-            <!-- Spell Checker Card -->
-            <div class="card">
-                <div class="card-icon"><i class="fas fa-spell-check"></i></div>
-                <h3>Spell Checker</h3>
-                <p>Ensure your writing is free from spelling errors with our advanced spell checker tool.</p>
-                <button><a href="{% url "spell" %}">Try it now</a></button>
-            </div>
-
-            <!-- Dictionary Card -->
-            <div class="card">
-                <div class="card-icon"><i class="fas fa-book"></i></div>
-                <h3>Dictionary</h3>
-                <p>Look up words and their meanings with our comprehensive dictionary feature.</p>
-                <button><a href="{% url 'dictionary' %}" style="color: inherit; text-decoration: none;">Try it now</a></button>
-            </div>
-
-            <!-- Grammar Checker Card -->
-            <div class="card">
-                <div class="card-icon"><i class="fas fa-check-double"></i></div>
-                <h3>Grammar Checker</h3>
-                <p>Get your sentences right with our AI-powered grammar checker.</p>
-                <button><a href="" style="color: inherit; text-decoration: none;">Try it now</a></button>
-            </div>
+      <h1 data-aos="fade-down">Platform Features</h1>
+      <div class="cards-wrapper">
+        <!-- Spell Checker Card -->
+        <div class="custom-card" data-aos="fade-up">
+          <div class="card-icon"><i class="fas fa-spell-check"></i></div>
+          <h3>Spell Checker</h3>
+          <p>
+            Ensure your writing is free from spelling errors with our advanced
+            spell checker tool.
+          </p>
+          <button class="btn-custom">
+            <a href="{% url 'spell' %}">Try it now</a>
+          </button>
         </div>
+
+        <!-- Dictionary Card -->
+        <div class="custom-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="card-icon"><i class="fas fa-book"></i></div>
+          <h3>Dictionary</h3>
+          <p>
+            Look up words and their meanings with our comprehensive dictionary
+            feature.
+          </p>
+          <button class="btn-custom">
+            <a href="{% url 'dictionary' %}">Try it now</a>
+          </button>
+        </div>
+
+        <div class="custom-card" data-aos="fade-up">
+          <div class="card-icon"><i class="fas fa-spell-check"></i></div>
+          <h3>Grammar Checker</h3>
+          <p>
+            Ensure your writing is free from grammatical errors with our
+            advanced spell checker tool.
+          </p>
+          <button class="btn-custom">
+            <a href="https://huggingface.co/spaces/exc19/grammar_checker"
+              >Try it now</a
+            >
+          </button>
+        </div>
+      </div>
     </div>
-</body>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 1000,
+        once: true,
+      });
+    </script>
+  </body>
 </html>
+{% endblock content %}

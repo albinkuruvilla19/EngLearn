@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,33 +8,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat with Alice</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #002b20;
-            color: #fff;
+            background-color: #e8f5e9; /* Light Green Background */
+            color: #33691e; /* Dark Green Text */
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            background-image: url('{% static "assets/img/home_page.png" %}'); /* Replace with your image path */
+            background-size: cover; /* Cover the entire body */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Prevent the image from repeating */
         }
         h1 {
-            background-color: #002b20;
-            color: #ffffff;
+            
+            color: #33691e; /* Dark Green */
             padding: 15px;
             text-align: center;
             margin: 0;
-            font-size: 1.8em;
-            border-bottom: 2px solid #004a36;
+            font-size: 2em; /* Increased font size */
+            border-bottom: 2px solid #004a36; /* Bottom border */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+        h1:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
         #chat-container {
             display: flex;
             flex-direction: column;
             flex: 1;
-            max-width: 800px;
+            max-width: 1000px; /* Adjusted width */
             margin: 20px auto;
-            background-color: #004a36;
+            /* White background for chat container */
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -39,8 +52,10 @@
         #chat-box {
             padding: 20px;
             height: 500px;
+            width:1000px;
             overflow-y: auto;
-            background-color: #003527;
+             /* Light background for chat */
+            border-bottom: 2px solid #ccc; /* Divider line */
         }
         #messages {
             display: flex;
@@ -53,22 +68,23 @@
             max-width: 80%;
             word-wrap: break-word;
             font-size: 1em;
+            position: relative;
         }
         #messages div:nth-child(odd) {
-            background-color: #f0f0f0;
+            background-color: #c8e6c9; /* Light Green for User Messages */
             color: #333;
             align-self: flex-start;
         }
         #messages div:nth-child(even) {
-            background-color: #004d40; /* Darker cyan for Alice's messages */
-            color: #e0f7fa;
+            background-color: #b2dfdb; /* Light Cyan for Alice's Messages */
+            color: #333;
             align-self: flex-end;
         }
         #chat-form {
             display: flex;
             border-top: 1px solid #ddd;
             padding: 10px;
-            background-color: #004a36;
+            background-color: #f1f1f1; /* Light background for form */
         }
         #user-input {
             flex: 1;
@@ -81,7 +97,7 @@
             box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
         }
         #send-button {
-            background-color: #25d366; /* WhatsApp green */
+            background-color: #25d366; /* WhatsApp Green */
             border: none;
             color: #ffffff;
             padding: 12px 20px;
@@ -91,25 +107,31 @@
             transition: background-color 0.3s;
         }
         #send-button:hover {
-            background-color: #1ebd74;
+            background-color: #1ebd74; /* Darker Green on Hover */
         }
     </style>
 </head>
 <body>
-    <h1>Chat with Alice</h1>
+    {% include "nav.html" %}
+    <h1 data-aos="fade-down">Chat with Alice</h1>
     <div id="chat-container">
         <div id="chat-box">
-            <div id="messages"></div>
+            <div id="messages" data-aos="fade-up" data-aos-duration="600"></div>
         </div>
         <form id="chat-form" method="post" action="">
             {% csrf_token %}
-            <input type="text" id="user-input" name="message" placeholder="Type your message...">
+            <input type="text" id="user-input" name="message" placeholder="Type your message..." required>
             <button type="submit" id="send-button">Send</button>
         </form>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+        });
         $(document).ready(function() {
             $('#chat-form').submit(function(event) {
                 event.preventDefault(); // Prevent the form from submitting the default way
@@ -125,3 +147,4 @@
     </script>
 </body>
 </html>
+{% endblock %}

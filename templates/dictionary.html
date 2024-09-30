@@ -1,109 +1,136 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EngLearn Dictionary</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        :root {
-            --primary-color: #25D366;
-            --secondary-color: #128C7E;
-            --background-color: #ECE5DD;
-            --text-color: #075E54;
-        }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
+            font-family: Arial, sans-serif;
+            background-image: url('{% static "assets/img/home_page.png" %}'); /* Replace with your image path */
+            background-size: cover; /* Cover the entire body */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Prevent the image from repeating */
+            color: #33691e;
             margin: 0;
             padding: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
-        .container {
-            width: 90%;
-            max-width: 800px;
-            margin: 50px auto;
+
+        /* Isolate styles within the dictionary-container */
+        .dictionary-container {
+            padding: 20px;
+            max-width: 1300px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-left: 8px solid #128C7E; /* WhatsApp Green */
+        }
+
+        .dictionary-container h1 {
             text-align: center;
+            color: #075E54; /* WhatsApp Dark Green */
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
         }
-        h1 {
-            color: var(--secondary-color);
-            font-size: 3rem;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-        .search-container {
-            background-color: #fff;
-            border-radius: 50px;
-            padding: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            display: flex;
-            margin-bottom: 30px;
-        }
-        input[type="text"] {
-            flex-grow: 1;
-            padding: 15px 20px;
-            font-size: 1rem;
-            border: none;
-            outline: none;
-            background: transparent;
-        }
-        button {
-            padding: 15px 30px;
-            font-size: 1rem;
-            background-color: var(--primary-color);
-            color: #fff;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-            font-weight: bold;
-        }
-        button:hover {
-            background-color: var(--secondary-color);
-            transform: scale(1.05);
-        }
-        .results {
-            background-color: #fff;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: left;
-            display: none;
-        }
-        .results h2 {
-            color: var(--secondary-color);
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-        .results h3 {
-            color: var(--primary-color);
-            font-size: 1.3rem;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-        .results p {
-            font-size: 1rem;
-            color: var(--text-color);
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        .results em {
-            font-style: italic;
-            color: #555;
-        }
+
         .dictionary-icon {
             font-size: 4rem;
-            color: var(--secondary-color);
+            color: #128C7E; /* WhatsApp Green */
+            display: block;
+            text-align: center;
             margin-bottom: 20px;
         }
+
+        .dictionary-container .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .dictionary-container .search-container input[type="text"] {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 300px;
+            margin-right: 10px;
+            outline: none;
+             /* Light Background */
+            color: #333;
+        }
+
+        .dictionary-container .search-container input[type="text"]:focus {
+            border-color: #25D366; /* WhatsApp Light Green */
+        }
+
+        .dictionary-container .search-container button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            background-color: #25D366; /* WhatsApp Light Green */
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .dictionary-container .search-container button:hover {
+            background-color: #128C7E; /* WhatsApp Green */
+        }
+
+        .dictionary-container .results {
+            display: none; /* Hidden by default */
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            
+        }
+
+        .dictionary-container .results h2 {
+            color: #128C7E; /* WhatsApp Green */
+            font-size: 1.8rem;
+        }
+
+        .dictionary-container .results h3 {
+            color: #075E54; /* WhatsApp Dark Green */
+            font-size: 1.4rem;
+            margin-top: 1rem;
+        }
+
+        .dictionary-container .results p {
+            margin: 0.5rem 0;
+        }
+
+        /* Ensure no conflict with the navbar styles */
+        .dictionary-container ul, .dictionary-container li {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        /* Style links within results */
+        .dictionary-container a {
+            color: #25D366; /* WhatsApp Light Green */
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .dictionary-container a:hover {
+            color: #128C7E; /* WhatsApp Green */
+        }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="container">
+    {% include "nav.html" %}
+
+    <div class="dictionary-container">
         <i class="fas fa-book-open dictionary-icon"></i>
         <h1>EngLearn Dictionary</h1>
         <div class="search-container">
@@ -157,3 +184,4 @@
     </script>
 </body>
 </html>
+{% endblock %}

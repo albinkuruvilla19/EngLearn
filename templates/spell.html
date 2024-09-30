@@ -1,151 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spell Checker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #25D366; /* Bright green */
-            --secondary-color: #128C7E; /* Dark teal */
-            --background-color: #F0F4F8; /* Light grey */
-            --text-color: #333; /* Dark grey */
-            --highlight-color: #FFEB3B; /* Yellow for highlighting */
-            --border-color: #DDDDDD; /* Light grey border */
-        }
-
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            background-image: url('{% static "assets/img/home_page.png" %}'); /* Replace with your image path */
+            background-size: cover; /* Cover the entire body */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Prevent the image from repeating */
+            color: #33691e;
         }
-
-        h1, h2 {
-            color: var(--primary-color);
+        /* Add a parent class for the spell checker container to isolate styles */
+        .spell-checker-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .spell-checker-container h1, .spell-checker-container h2 {
+            color: #1b5e20;
             text-align: center;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
         }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 30px;
-            background-color: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: 20px auto;
-            border: 1px solid var(--border-color);
+        .spell-checker-container h2 {
+            font-size: 1.5rem;
+            margin-top: 2rem;
         }
-
-        .form-group {
-            margin-bottom: 15px;
+        .spell-checker-container .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .spell-checker-container textarea {
             width: 100%;
+            padding: 1rem;
+            border: 1px solid #a5d6a7;
+            border-radius: 5px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-
-        .form-group label {
-            font-weight: bold;
-            color: var(--secondary-color);
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            font-size: 1rem;
-            color: var(--text-color);
-        }
-
-        .form-group input:focus, .form-group textarea:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-        }
-
-        button {
-            background-color: var(--primary-color);
-            color: #fff;
+        .spell-checker-container button {
+            background-color: #2e7d32;
+            color: white;
             border: none;
-            border-radius: 25px;
-            padding: 12px 25px;
-            font-size: 1rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-            font-weight: bold;
-            margin-top: 10px;
+            transition: background-color 0.3s ease;
             display: block;
+            margin: 0 auto;
         }
-
-        button:hover {
-            background-color: var(--secondary-color);
-            transform: scale(1.05);
+        .spell-checker-container button:hover {
+            background-color: #1b5e20;
         }
-
-        .highlighted-text {
-            background-color: var(--highlight-color);
-            padding: 10px;
-            border-radius: 6px;
-            color: var(--text-color);
-            word-wrap: break-word;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        .spell-checker-container .highlighted-text {
+            background-color: #e0f2f1;
+            padding: 1rem;
+            border: 1px solid #81c784;
+            border-radius: 5px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-
-        ul {
-            list-style: none;
+        .spell-checker-container ul {
+            list-style-type: none;
             padding: 0;
-            margin: 0;
         }
-
-        li {
-            margin-bottom: 10px;
-            background-color: #fff;
-            padding: 10px;
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            transition: background-color 0.3s;
+        .spell-checker-container ul li {
+            background-color: #c8e6c9;
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
-        li:hover {
-            background-color: var(--highlight-color);
-        }
-
-        strong {
-            color: var(--secondary-color);
+        /* Ensure no collision with the navbar styles */
+        .spell-checker-container ul li a {
+            color: #33691e; /* Ensure link color is specific to this container */
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
-    <h1>Spell Checker</h1>
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            {{ form.as_p }}
-        </div>
-        <button type="submit">Check Spelling</button>
-    </form>
+    {% include "nav.html" %}
+    <div class="spell-checker-container">
+        <h1 data-aos="fade-down">Spell Checker</h1>
+        <form method="post" data-aos="fade-up">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            <button type="submit">Check Spelling</button>
+        </form>
 
-    {% if highlighted_text %}
-        <h2>Highlighted Text</h2>
-        <p class="highlighted-text">{{ highlighted_text|safe }}</p>
-    {% endif %}
+        {% if highlighted_text %}
+            <h2 data-aos="fade-up">Highlighted Text</h2>
+            <p class="highlighted-text" data-aos="fade-right">{{ highlighted_text|safe }}</p>
+        {% endif %}
 
-    {% if suggestions %}
-        <h2>Suggestions</h2>
-        <ul>
-            {% for suggestion in suggestions %}
-                <li>
-                    <strong>{{ suggestion.error }}</strong> - Suggestions: 
-                    {% for word in suggestion.suggestions %}
-                        {{ word }}{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+        {% if suggestions %}
+            <h2 data-aos="fade-up">Suggestions</h2>
+            <ul>
+                {% for suggestion in suggestions %}
+                    <li data-aos="fade-up">
+                        <strong>{{ suggestion.error }}</strong> - Suggestions: 
+                        {% for word in suggestion.suggestions %}
+                            {{ word }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+        });
+    </script>
 </body>
 </html>
+
+{% endblock %}
